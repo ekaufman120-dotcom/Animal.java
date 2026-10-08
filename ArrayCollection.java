@@ -11,7 +11,7 @@
 
 public class ArrayCollection<T> implements CollectionInterface<T>  
 {
-  protected final int DEFCAP = 100; // default capacity
+  protected final int DEFCAP = 999; // default capacity
   protected T[] elements;           // array to hold collection's elements
   protected int numElements = 0;    // number of elements in this collection
 
