@@ -31,19 +31,27 @@ public class AnimalGame {
             System.out.println(i+": "+(char)(i));
         }
         */
+        Scanner scanner = new Scanner(System.in);
         int correct = 0;
-        while(gameRound(animals, letter)) 
+        while(gameRound(animals, letter, correct, scanner)) 
         {
             correct++;
         }
         System.out.println("You got " + correct + " correct answer(s).");
+        scanner.close();
 
     }
 
-    public static boolean gameRound(ArrayCollection<String> animals, char letter)
+    public static boolean gameRound(ArrayCollection<String> animals, char letter, int wins, Scanner scanner)
     {
-        System.out.println("Enter an animal that starts with the letter " + letter + ": ");
-        Scanner scanner = new Scanner(System.in);
+        if(wins==0)
+        {
+            System.out.println("Enter an animal that starts with the letter " + letter + ": ");
+        }
+        else
+        {
+            System.out.println("Enter an animal that starts with the following letter (no repeats!): " + letter);
+        }
         String input = scanner.nextLine();
         System.out.println("You entered: " + input);
         if(animals.contains(input) && input.charAt(0) == letter)
@@ -52,11 +60,15 @@ public class AnimalGame {
             System.out.println("Correct!");
             return true;
         }
-        if(!animals.contains(input))
+        if(!animals.contains(input)&&wins==0)
         {
             System.out.println("That animal is not in the list, you lose!");
         }
-        if(input.length()>0&&input.charAt(0) != letter)
+        else if(!animals.contains(input)&&wins>0)
+        {
+            System.out.println("That animal is not in the list or has already been used, you lose!");
+        }
+        else if(input.length()>0&&input.charAt(0) != letter)
         {
             System.out.println("That animal does not start with your letter " + letter + ", you lose!");
         }
