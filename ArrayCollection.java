@@ -8,23 +8,24 @@
 // Two constructors are provided: one that creates a collection of a default
 // capacity, and one that allows the calling program to specify the capacity.
 //---------------------------------------------------------------------------
-package ch05.collections;
 
 public class ArrayCollection<T> implements CollectionInterface<T>  
 {
   protected final int DEFCAP = 100; // default capacity
-  protected T[] elements;           // array to hold collection’s elements
+  protected T[] elements;           // array to hold collection's elements
   protected int numElements = 0;    // number of elements in this collection
 
   // set by find method
   protected boolean found;  // true if target found, otherwise false
   protected int location;   // indicates location of target if found
 
+  @SuppressWarnings("unchecked")
   public ArrayCollection() 
   {
     elements = (T[]) new Object[DEFCAP];
   }
 
+  @SuppressWarnings("unchecked")
   public ArrayCollection(int capacity) 
   {
     elements = (T[]) new Object[capacity];
