@@ -10,7 +10,7 @@ public class AnimalGame {
             File file = new File("Animals.txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
-                animals.add(scanner.nextLine());
+                animals.add(scanner.nextLine().toLowerCase());
             }
             scanner.close();
         } catch (FileNotFoundException e) {
@@ -22,18 +22,20 @@ public class AnimalGame {
             System.out.println("The file is empty or not found, so the game cannot proceed.");
             throw new RuntimeException("The file is empty or not found, so the game cannot proceed.");
         }
-
+        ArrayCollection<String> duplicates = new ArrayCollection<String>();
         int random = (int)(Math.random() * 26 + 65);
-        char letter = (char) random;
+        String letter =  ""+(char)(random);
+        letter = letter.toLowerCase();
         /*
         for(int i = 0; i < 100; i++)
         {
             System.out.println(i+": "+(char)(i));
         }
         */
+        //only ONE scanner used, rather than making one every time
         Scanner scanner = new Scanner(System.in);
         int correct = 0;
-        while(gameRound(animals, letter, correct, scanner)) 
+        while(gameRound(animals, duplicates, letter, scanner)) 
         {
             correct++;
         }
@@ -42,35 +44,40 @@ public class AnimalGame {
 
     }
 
-    public static boolean gameRound(ArrayCollection<String> animals, char letter, int wins, Scanner scanner)
+    public static boolean gameRound(ArrayCollection<String> animals, ArrayCollection<String> duplicates, String letter, Scanner scanner)
     {
-        if(wins==0)
+        if(duplicates.isEmpty())
         {
-            System.out.println("Enter an animal that starts with the letter " + letter + ": ");
+            System.out.println("Enter an animal that starts with the letter " + letter.toUpperCase() + ": ");
         }
         else
         {
-            System.out.println("Enter an animal that starts with the following letter (no repeats!): " + letter);
+            System.out.println("Enter an animal that starts with the following letter (no repeats!): " + letter.toUpperCase());
         }
-        String input = scanner.nextLine();
+        String input = scanner.nextLine().toLowerCase();
         System.out.println("You entered: " + input);
-        if(animals.contains(input) && input.charAt(0) == letter)
+        if(animals.contains(input) && input.charAt(0) == letter.charAt(0))
         {
             animals.remove(input);
+            duplicates.add(input);
             System.out.println("Correct!");
             return true;
         }
-        if(!animals.contains(input)&&wins==0)
+        if(input.length()>0&&input.charAt(0) != letter.charAt(0))
+        {
+            System.out.println("That animal does not start with your letter " + letter.toUpperCase() + ", you lose!");
+        }
+        else if(!animals.contains(input)&&!duplicates.contains(input))
         {
             System.out.println("That animal is not in the list, you lose!");
         }
-        else if(!animals.contains(input)&&wins>0)
+        else if(duplicates.contains(input))
         {
-            System.out.println("That animal is not in the list or has already been used, you lose!");
+            System.out.println("That animal has already been used, you lose!");
         }
-        else if(input.length()>0&&input.charAt(0) != letter)
+        else
         {
-            System.out.println("That animal does not start with your letter " + letter + ", you lose!");
+            System.out.println("Error: invalid accuracy case");
         }
         return false;
     }
